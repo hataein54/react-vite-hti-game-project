@@ -1,9 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { routes } from "../../router/Router";
 
 const Header = () => {
-    return (
+  return (
     <>
-              <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <a className="navbar-brand" href="{() => false}">
             React
@@ -25,25 +27,32 @@ const Header = () => {
                 routes.map((route) => (
                   //console.log(route.loader() + route.path)
                   <li className="nav-item dropdown">
-                    <Link to={route.path} className="nav-link dropdown-toggle"  id="navbarDropdown"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <Link
+                      to={route.path}
+                      className="nav-link dropdown-toggle"
+                      id="navbarDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
                       {route.loader()}
                     </Link>
-                    { route.children && 
-                      <ul className='dropdown-menu' aria-labelledby='navbarDropdown'>
-                       {
-                        route.children.map((child) => (
+                    {route.children && (
+                      <ul
+                        className="dropdown-menu"
+                        aria-labelledby="navbarDropdown"
+                      >
+                        {route.children.map((child) => (
                           <li key={child.loader()}>
                             <Link to={child.path} className="dropdown-item">
                               {child.loader()}
                             </Link>
                           </li>
-                        ))
-                        }                      
+                        ))}
                       </ul>
-                    }
+                    )}
                   </li>
-                ))
-               }
+                ))}
             </ul>
             <form className="d-flex">
               <input
@@ -60,7 +69,7 @@ const Header = () => {
         </div>
       </nav>
     </>
-    );
+  );
 };
 
 export default Header;
