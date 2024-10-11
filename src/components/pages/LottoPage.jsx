@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import LottoBall from "../lotto/LottoBall";
+import LottoBall from "./../lotto/LottoBall";
 
-function LottoPage () {
-  const setNumbers = ()=> {
+const LottoPage = () => {
+  const setNumbers = () => {
     const lottoSet = new Set();
 
-    while(lottoSet.size < 6){
-      let num = Math.floor(Math.random()* 45) +1;
+    while (lottoSet.size < 6) {
+      let num = Math.floor(Math.random() * 45) + 1;
       lottoSet.add(num);
     }
 
-    console.log(lottoSet)
+    console.log(lottoSet);
     return Array.from(lottoSet);
   };
 
   const [nums, setNums] = useState(setNumbers);
+
 
   return (
     <div className="container">
@@ -23,8 +24,6 @@ function LottoPage () {
       </div>
     </div>
   );
-
 };
-
 
 export default LottoPage;

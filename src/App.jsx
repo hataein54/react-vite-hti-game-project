@@ -13,6 +13,6 @@ function App() {
     <Footer></Footer>
     </div>
   )
-}ㄴ
+}
 
 export default App
