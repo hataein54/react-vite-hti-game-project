@@ -2,7 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "./../App";
 import LottoPage from "../components/pages/LottoPage";
 import RspPage from "../components/pages/RspPage";
-import BoardService from "../service/BoardService";
+import BoardListPage from "../components/pages/BoardListPage";
+import BoardWritePage from "../components/pages/BoardWritePage";
 
 const routes = [
   {
@@ -37,7 +38,12 @@ const routes = [
       {
         path: "/boards",
         loader: () => "게시판",
-        element: <BoardService />,
+        element: <BoardListPage />,
+      },
+      {
+        path: "/boards/write",
+        loader: () => "글쓰기",
+        element: <BoardWritePage />,
       },
     ],
   },
