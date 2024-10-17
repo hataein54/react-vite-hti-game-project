@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import boardService from "../../services/BoardService";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 const BoardUpdatePage = () => {
   const initBoardState = {
@@ -16,10 +16,6 @@ const BoardUpdatePage = () => {
   const { bid } = useParams();
 
   const [board, setBoard] = useState(initBoardState);
-
-  //redirect를 위한 처리
-
-  const [submitted, setSubmitted] = useState(false);
 
   //처음 랜더링 하고, 한번만 타라
   useEffect(() => {
@@ -39,20 +35,12 @@ const BoardUpdatePage = () => {
     setBoard({ ...board, [name]: value });
   };
 
-  const saveBoard = () => {
-    let data = {
-      bname: board.bname,
-      btitle: board.btitle,
-      bcontent: board.bcontent,
-    };
-
-    console.log(data);
-
+  const updateBoard = () => {
     boardService
-      .write(data)
+      .update(board)
       .then((respose) => {
         console.log(respose);
-        setSubmitted(true);
+        naviage(`/boards`);
       })
       .catch((error) => {
         console.log(error);
@@ -61,9 +49,13 @@ const BoardUpdatePage = () => {
     /* axios 글 저장 */
   };
 
-  return submitted ? (
-    <Navigate to={{ pathname: "/boards" }} />
-  ) : (
+  const naviage = useNavigate();
+
+  const cancelClick = () => {
+    naviage(`/boards`);
+  };
+
+  return (
     <div>
       <div className="container mt-3">
         <div className="container">
@@ -111,14 +103,17 @@ const BoardUpdatePage = () => {
                     rows="10"
                   />
                 </div>
-                <button className="btn btn-success" onClick={saveBoard}>
-                  Save
+                <button className="btn btn-success" onClick={updateBoard}>
+                  업데이트
                 </button>
                 <button
                   className="btn btn-danger"
                   style={{ marginLeft: "10px" }}
+                  onClick={() => {
+                    naviage(`/boards`);
+                  }}
                 >
-                  Cancel
+                  취소
                 </button>
               </div>
             </div>
