@@ -49,7 +49,7 @@ const routes = [
       {
         path: "/boards/:bid",
         loader: () => "글업데이트",
-        element: <BoardUpdatePage/>,
+        element: <BoardUpdatePage />,
       },
     ],
   },

@@ -14,18 +14,17 @@ const LottoPage = () => {
     return Array.from(lottoSet);
   };
 
-  const [nums, setNums] = useState(setNumbers);
+  const [nums, setNums] = useState(setNumbers());
 
-  const refreshNumbers =()=>{
+  const onClick = () => {
     setNums(setNumbers());
-  }
+  };
 
   return (
     <div className="container">
-      <div className="row mt-sm-5">
+      <div onClick={onClick} className="row mt-sm-5">
         {nums && nums.map((num) => <LottoBall lottoNum={num}></LottoBall>)}
       </div>
-      <button type="button" onClick={refreshNumbers} >한번 더</button>
     </div>
   );
 };
