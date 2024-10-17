@@ -1,131 +1,118 @@
 import React, { useEffect, useState } from "react";
 import boardService from "../../services/BoardService";
+import { Navigate } from "react-router-dom";
 
-const BoardListPage = () => {
-  const [boards, setBoards] = useState([]);
-
-  // 정리하면 아래와 같다.
-
-  // useEffect(() => {
-  //   // 매 렌더링마다 실행
-  // });
-
-  // useEffect(() => {
-  //   // 컴포넌트가 처음 렌더링된 실행
-  // }, []);
-
-  // useEffect(() => {
-  //   // 컴포넌트가 처음 렌더링된 이후 실행
-  //   // a나 b가 변경되어 컴포넌트가 재렌더링된 이후 실행
-  // }, [a, b]);
-
-  useEffect(() => {
-    console.log("use Effective 실행");
-    initBoards();
-  }, []);
-
-  const initBoards = () => {
-    boardService.getPagingList()
-    .then((response) => {
-      console.log(response);
-      setBoards(response.date.boards);
-    }).catch((e)=>{
-      console.log(e);
-    })
+const BoardUpdatePage = () => {
+  const initBoardState = {
+    bname: "",
+    btitle: "",
+    bcontent: "",
   };
 
-  const deleteBoard = (e)=> {
-    const {name, value}= e.target;
+  const [board, setBoard] = useState(initBoardState);
 
-    console.log(name + "::"+value);
+  //redirect를 위한 처리
 
-    boardService.remove(value);
-  } 
+  const [submitted, setSubmitted] = useState(false);
 
-  return(
-    <div className="container mt-3">
-    <div className="container-fluid">
-      {/* <!-- Page Heading --> */}
-      <h1 className="h3 mb-2 text-gray-800">게시판</h1>
-      <p className="mb-4">
-        DataTables is a third party plugin that is used to generate the demo
-        table below. For more information about DataTables, please visit the{' '}
-        <a target="_blank" href="https://datatables.net">
-          official DataTables documentation
-        </a>
-        .
-      </p>
+  //처음 랜더링 하고, 한번만 타라
+  //useEffect(() => {
+  //  saveBoard();
+  //}, []);
 
-      {/* <!-- DataTales Example --> */}
-      <div className="card shadow mb-4">
-        <div className="card-header py-3">
-          <h6 className="m-0 font-weight-bold text-primary">
-            DataTables Example
-          </h6>
-        </div>
-        <div className="card-body">
-          <div className="table-responsive">
-            <table
-              className="table table-bordered"
-              id="dataTable"
-              width="100%"
-              cellspacing="0"
-            >
-              <thead>
-                <tr>
-                  <th>번호</th>
-                  <th>이름</th>
-                  <th>제목</th>
-                  <th>날짜</th>
-                  <th>히트</th>
-                  <th className="text-center">삭제</th>
-                </tr>
-              </thead>
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setBoard({ ...board, [name]: value });
+  };
 
-              <tbody>
-                {boards &&
-                  boards.map((board) => (
-                    <tr key={board.bid}>
-                      <td>{board.bid}</td>
-                      <td>{board.bname}</td>
+  const saveBoard = () => {
+    let data = {
+      bname: board.bname,
+      btitle: board.btitle,
+      bcontent: board.bcontent,
+    };
 
-                      <td>
-                        <Link to={'/board/' + board.bid}>{board.btitle}</Link>
-                      </td>
+    console.log(data);
 
-                      <td>{board.bdate}</td>
-                      <td>{board.bhit}</td>
-                      <td className="text-center">
-                        <button
-                          className="btn btn-success"
-                          value={board.bid}
-                          onClick={deleteBoard}
-                        >
-                          삭제
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+    boardService
+      .write(data)
+      .then((respose) => {
+        console.log(respose);
+        setSubmitted(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    /* axios 글 저장 */
+  };
+
+  return submitted ? (
+    <Navigate to={{ pathname: "/boards" }} />
+  ) : (
+    <div>
+      <div className="container mt-3">
+        <div className="container">
+          <div className="row">
+            <div className="card col-md-6 offset-md-3 offset-md-3">
+              <h3 className="text-center mt-3">업데이트도 할수 있어요</h3>
+              <div className="card-body">
+                <div className="form-group">
+                  <label> Type </label>
+                  <select placeholder="type" className="form-control">
+                    <option value="1">자유게시판</option>
+                    {/* <option value="2">질문과 답변</option> */}
+                  </select>
+                </div>
+                <div className="form-group mt-3">
+                  <label> Name </label>
+                  <input
+                    type="text"
+                    placeholder="이름을 넣으시오"
+                    name="bname"
+                    className="form-control"
+                    value={board.bname}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-group mt-3">
+                  <label> Title </label>
+                  <input
+                    placeholder="제목을 넣으시오."
+                    name="btitle"
+                    className="form-control"
+                    value={board.btitle}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-group mt-3 mb-3">
+                  <label> Content </label>
+
+                  <textarea
+                    placeholder="내용을 적으시오"
+                    name="bcontent"
+                    className="form-control"
+                    value={board.bcontent}
+                    onChange={handleInputChange}
+                    rows="10"
+                  />
+                </div>
+                <button className="btn btn-success" onClick={saveBoard}>
+                  Save
+                </button>
+                <button
+                  className="btn btn-danger"
+                  style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
-          {/* 페이징           */}
-          {/* <PaginationB5
-            paging={paging}
-            onClickPaging={onClickPaging}
-          ></PaginationB5> */}
-          <hr />
-          <Link to="/boards/write">
-            <button type="button" className="btn btn-primary">
-              글쓰기
-            </button>
-          </Link>
         </div>
       </div>
     </div>
-  </div>
-  // <!-- /.container-fluid -->
   );
 };
 
-export default BoardListPage;
+export default BoardUpdatePage;
