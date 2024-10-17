@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import RspCard from "./../rsp/RspCard";
 
-import rock from "../../assets/rsp/rock.jpg";
-import paper from "../../assets/rsp/paper.jpg";
-import scissor from "../../assets/rsp/scissor.jpg";
+import rock from "../../assets/rsp/rock.png";
+import paper from "../../assets/rsp/paper.png";
+import scissor from "../../assets/rsp/scissor.png";
 
 const RspPage = () => {
   const [players, setPlayers] = useState([
