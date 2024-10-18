@@ -8,7 +8,7 @@ const BoardListPage = () => {
 
   //http://localhost:8282/boards/list
   const [paging, setPaging] = useState({});
-  
+
   // 정리하면 아래와 같다.
 
   // useEffect(() => {
@@ -35,6 +35,7 @@ const BoardListPage = () => {
       .then((response) => {
         console.log(response);
         setBoards(response.data.boards);
+        setPaging(response.data.page)
       })
       .catch((e) => {
         console.log(e);
@@ -125,7 +126,7 @@ const BoardListPage = () => {
               </table>
             </div>
             {/* 페이징           */}
-            <Pagingnation></Pagingnation>
+            {<Pagingnation paging={paging} ></Pagingnation>}
             <hr />
             <Link to="/boards/write">
               <button type="button" className="btn btn-primary">
